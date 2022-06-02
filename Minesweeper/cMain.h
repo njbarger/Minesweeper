@@ -7,14 +7,14 @@ public:
 	cMain();
 	~cMain();
 
-	int nFieldWidth = 10;
-	int nFieldHeight = 10;
-	wxButton** btn;
+	int GridWidth = 10;
+	int GridHeight = 10;
+	wxButton** buttonArray;
 	
 	// locations of mines
-	int* nField = nullptr;
+	int* bombArray = nullptr;
 	// populates mine field on first click
-	bool bFirstClick = true;
+	bool firstClick = true;
 
 	void OnButtonClicked(wxCommandEvent& evt);
 

@@ -12,23 +12,28 @@ wxEND_EVENT_TABLE()
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSize(600,600))
 {
 	// Grid of buttons
-	btn = new wxButton * [nFieldWidth * nFieldHeight];
-	wxGridSizer* grid = new wxGridSizer(nFieldWidth, nFieldHeight, 0, 0);
+	buttonArray = new wxButton * [GridWidth * GridHeight];
+	wxGridSizer* grid = new wxGridSizer(GridWidth, GridHeight, 0, 0);
 
-	nField = new int[nFieldWidth * nFieldHeight];
+	bombArray = new int[GridWidth * GridHeight];
 
-	for (size_t x = 0; x < nFieldWidth; x++)
+	wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
+
+	for (size_t x = 0; x < GridWidth; x++)
 	{
-		for (size_t y = 0; y < nFieldHeight; y++)
+		for (size_t y = 0; y < GridHeight; y++)
 		{
 			// Adds a button to each position
-			btn[y * nFieldWidth + x] = new wxButton(this, 10000 + (y * nFieldWidth + x));
+			buttonArray[y * GridWidth + x] = new wxButton(this, 10000 + (y * GridWidth + x));
+
+			buttonArray[y * GridWidth + x]->SetFont(font);
+
 			// Adds to grid to fill in space?
-			grid->Add(btn[y * nFieldWidth + x], 1, wxEXPAND | wxALL);
+			grid->Add(buttonArray[y * GridWidth + x], 1, wxEXPAND | wxALL);
 
 			// Binds an click event handler to each button
-			btn[y * nFieldWidth + x]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnButtonClicked, this);
-			nField[y * nFieldWidth + x] = 0;
+			buttonArray[y * GridWidth + x]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnButtonClicked, this);
+			bombArray[y * GridWidth + x] = 0;
 		}
 	}
 
@@ -39,56 +44,56 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 
 cMain::~cMain()
 {
-	delete[] btn;
+	delete[] buttonArray;
 }
 
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
 	// Get coordinate of button in field array
-	int x = (evt.GetId() - 10000) % nFieldWidth;
-	int y = (evt.GetId() - 10000) / nFieldWidth;
+	int x = (evt.GetId() - 10000) % GridWidth;
+	int y = (evt.GetId() - 10000) / GridWidth;
 
-	if (bFirstClick)
+	if (firstClick)
 	{
 		int mines = 30;
 
 		while (mines)
 		{
 			// generate random mine locations
-			int rx = rand() % nFieldWidth;
-			int ry = rand() % nFieldHeight;
+			int rx = rand() % GridWidth;
+			int ry = rand() % GridHeight;
 
 			// make sure its not first button clicked, and is not already a mine
-			if (nField[ry * nFieldWidth + rx] == 0 && rx != x && ry != y)
+			if (bombArray[ry * GridWidth + rx] == 0 && rx != x && ry != y)
 			{
 				// set to mine
-				nField[ry * nFieldWidth + rx] = -1;
+				bombArray[ry * GridWidth + rx] = -1;
 				mines--;
 			}
 
 		}
 
-		bFirstClick = false;
+		firstClick = false;
 	}
 
 	// Disable Button, preventing it being pressed again
-	btn[y * nFieldWidth + x]->Enable(false);
+	buttonArray[y * GridWidth + x]->Enable(false);
 	
 	// check if player hit a mine
-	if (nField[y*nFieldWidth + x] == -1)
+	if (bombArray[y*GridWidth + x] == -1)
 	{
 		// lose message
 		wxMessageBox("Get rekt loser, try again.");
 
 		// reset game
-		bFirstClick = true;
-		for (size_t x = 0; x < nFieldWidth; x++)
+		firstClick = true;
+		for (size_t x = 0; x < GridWidth; x++)
 		{
-			for (size_t y = 0; y < nFieldHeight; y++)
+			for (size_t y = 0; y < GridHeight; y++)
 			{
-				nField[y * nFieldWidth + x] = 0;
-				btn[y * nFieldWidth + x]->SetLabel("");
-				btn[y * nFieldWidth + x]->Enable(true);
+				bombArray[y * GridWidth + x] = 0;
+				buttonArray[y * GridWidth + x]->SetLabel("");
+				buttonArray[y * GridWidth + x]->Enable(true);
 			}
 		}
 	}
@@ -100,9 +105,9 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 		{
 			for (int j = -1; j < 2; j++)
 			{
-				if (x + 1 >= 0 && x + i < nFieldWidth && y + j >= 0 && y + j < nFieldHeight)
+				if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
 				{
-					if (nField[(y + j) * nFieldWidth + (x + i)] == -1)
+					if (bombArray[(y + j) * GridWidth + (x + i)] == -1)
 						mineCount++;
 				}
 			}
@@ -111,7 +116,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 		// update button label to show min count if > 0
 		if (mineCount > 0)
 		{
-			btn[y * nFieldWidth + x]->SetLabel(std::to_string(mineCount));
+			buttonArray[y * GridWidth + x]->SetLabel(std::to_string(mineCount));
 		}
 
 
