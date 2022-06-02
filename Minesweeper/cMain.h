@@ -10,6 +10,11 @@ public:
 	int nFieldWidth = 10;
 	int nFieldHeight = 10;
 	wxButton** btn;
+	
+	// locations of mines
+	int* nField = nullptr;
+	// populates mine field on first click
+	bool bFirstClick = true;
 
 	void OnButtonClicked(wxCommandEvent& evt);
 
