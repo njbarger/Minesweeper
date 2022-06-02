@@ -45,6 +45,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 cMain::~cMain()
 {
 	delete[] buttonArray;
+	delete[] bombArray;
 }
 
 void cMain::OnButtonClicked(wxCommandEvent& evt)
