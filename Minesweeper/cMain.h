@@ -17,9 +17,11 @@ public:
 	// populates mine field on first click
 	bool firstClick = true;
 
-
+	// Click Event
 	void OnButtonClicked(wxCommandEvent& evt);
-	
+
+	// Neighboring Bomb Count
+	int CountNeighbors(int x, int y);
 
 	// Event handler
 	wxDECLARE_EVENT_TABLE();

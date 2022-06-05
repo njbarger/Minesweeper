@@ -48,6 +48,23 @@ cMain::~cMain()
 	delete[] bombArray;
 }
 
+int cMain::CountNeighbors(int x, int y)
+{
+	// Count neighboring mines
+	int mineCount = 0;
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
+			{
+				if (bombArray[(y + j) * GridWidth + (x + i)] == -1)
+					mineCount++;
+			}
+		}
+	}
+	return mineCount;
+}
 
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
@@ -106,22 +123,26 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	}
 	else
 	{
-		// MOVE TO SEPARATE FUNCTION? WANT TO "TOGGLE NEIGHBORS IN NEIGHBORS neighborCount == 0
-		//
 		// Count neighboring mines
-		int mineCount = 0;
-		for (int i = -1; i < 2; i++)
+		int mineCount = CountNeighbors(x,y);
+		
+		
+		// empty tile opens all nearby empty tiles
+		if (mineCount == 0)
 		{
-			for (int j = -1; j < 2; j++)
+			for (int i = -1; i < 2; i++)
 			{
-				if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
+				for (int j = -1; j < 2; j++)
 				{
-					if (bombArray[(y + j) * GridWidth + (x + i)] == -1)
-						mineCount++;
+					if (bombArray[(y + j) * GridWidth + (x + i)] == 0)
+					{
+						buttonArray[(y+j) * GridWidth + (x+i)]->Enable(false);
+						buttonArray[(y+j) * GridWidth + (x+i)]->SetBackgroundColour(*wxGREEN);
+					}
 				}
 			}
 		}
-
+		
 		// update button label to show min count if > 0
 		if (mineCount > 0)
 		{
