@@ -85,8 +85,11 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// check if player hit a mine
 	if (bombArray[y*GridWidth + x] == -1)
 	{
+		// Set bomb color
+		buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxBLACK);
+		
 		// lose message
-		wxMessageBox("Get rekt loser, try again.");
+		wxMessageBox("Game over, try again");
 
 		// reset game
 		firstClick = true;
@@ -103,6 +106,8 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	}
 	else
 	{
+		// MOVE TO SEPARATE FUNCTION? WANT TO "TOGGLE NEIGHBORS IN NEIGHBORS neighborCount == 0
+		//
 		// Count neighboring mines
 		int mineCount = 0;
 		for (int i = -1; i < 2; i++)
