@@ -25,8 +25,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 		{
 			// Adds a button to each position
 			buttonArray[y * GridWidth + x] = new wxButton(this, 10000 + (y * GridWidth + x));
-
 			buttonArray[y * GridWidth + x]->SetFont(font);
+			buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxWHITE);
 
 			// Adds to grid to fill in space?
 			grid->Add(buttonArray[y * GridWidth + x], 1, wxEXPAND | wxALL);
@@ -47,6 +47,7 @@ cMain::~cMain()
 	delete[] buttonArray;
 	delete[] bombArray;
 }
+
 
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
@@ -79,6 +80,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 	// Disable Button, preventing it being pressed again
 	buttonArray[y * GridWidth + x]->Enable(false);
+	buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxGREEN);
 	
 	// check if player hit a mine
 	if (bombArray[y*GridWidth + x] == -1)
@@ -95,6 +97,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 				bombArray[y * GridWidth + x] = 0;
 				buttonArray[y * GridWidth + x]->SetLabel("");
 				buttonArray[y * GridWidth + x]->Enable(true);
+				buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxWHITE);
 			}
 		}
 	}
@@ -118,6 +121,14 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 		if (mineCount > 0)
 		{
 			buttonArray[y * GridWidth + x]->SetLabel(std::to_string(mineCount));
+			if (mineCount > 1 && mineCount <= 2)
+			{
+				buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxYELLOW);
+			}
+			else if (mineCount > 2)
+			{
+				buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxRED);
+			}
 		}
 
 
