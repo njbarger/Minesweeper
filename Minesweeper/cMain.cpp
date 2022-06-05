@@ -102,7 +102,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	if (bombArray[y*GridWidth + x] == -1)
 	{
 		// lose message
-		wxMessageBox("Get rekt loser, try again.");
+		wxMessageBox("Game over, try again.");
 
 		// reset game
 		firstClick = true;
