@@ -48,6 +48,24 @@ cMain::~cMain()
 	delete[] bombArray;
 }
 
+
+int cMain::CountNeighbors(int x, int y)
+{
+	int mineCount = 0;
+	for (int i = -1; i < 2; i++)
+	{
+		for (int j = -1; j < 2; j++)
+		{
+			if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
+			{
+				if (bombArray[(y + j) * GridWidth + (x + i)] == -1)
+					mineCount++;
+			}
+		}
+	}
+	return mineCount;
+}
+
 void cMain::OnButtonClicked(wxCommandEvent& evt)
 {
 	// Get coordinate of button in field array
@@ -101,18 +119,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	else
 	{
 		// Count neighboring mines
-		int mineCount = 0;
-		for (int i = -1; i < 2; i++)
-		{
-			for (int j = -1; j < 2; j++)
-			{
-				if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
-				{
-					if (bombArray[(y + j) * GridWidth + (x + i)] == -1)
-						mineCount++;
-				}
-			}
-		}
+		int mineCount = CountNeighbors(x, y);
 
 		// update button label to show min count if > 0
 		if (mineCount > 0)

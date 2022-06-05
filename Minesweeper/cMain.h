@@ -17,6 +17,7 @@ public:
 	bool firstClick = true;
 
 	void OnButtonClicked(wxCommandEvent& evt);
+	int CountNeighbors(int x, int y);
 
 	// Event handler
 	wxDECLARE_EVENT_TABLE();
