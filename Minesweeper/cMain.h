@@ -14,6 +14,10 @@ public:
 	
 	// locations of mines
 	int* bombArray = nullptr;
+
+	// bool array for ifCounted;
+	bool* countArray;
+
 	// populates mine field on first click
 	bool firstClick = true;
 
@@ -22,6 +26,9 @@ public:
 
 	// Neighboring Bomb Count
 	int CountNeighbors(int x, int y);
+	
+	// Open all empty tiles adjacent to each other
+	void OpenEmptyTiles(int x, int y);
 
 	// Event handler
 	wxDECLARE_EVENT_TABLE();

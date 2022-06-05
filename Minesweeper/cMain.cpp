@@ -2,20 +2,21 @@
 
 // takes name of class with base class
 wxBEGIN_EVENT_TABLE(cMain, wxFrame)
-	EVT_BUTTON(10001, OnButtonClicked)
+EVT_BUTTON(10001, OnButtonClicked)
 
 wxEND_EVENT_TABLE()
 
 
 
 // Main application window
-cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSize(600,600))
+cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSize(600, 600))
 {
 	// Grid of buttons
 	buttonArray = new wxButton * [GridWidth * GridHeight];
 	wxGridSizer* grid = new wxGridSizer(GridWidth, GridHeight, 0, 0);
 
 	bombArray = new int[GridWidth * GridHeight];
+	countArray = new bool[GridWidth * GridHeight];
 
 	wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
 
@@ -23,6 +24,8 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 	{
 		for (size_t y = 0; y < GridHeight; y++)
 		{
+			// Sets count bools all to false;
+			countArray[x, y] = false;
 			// Adds a button to each position
 			buttonArray[y * GridWidth + x] = new wxButton(this, 10000 + (y * GridWidth + x));
 			buttonArray[y * GridWidth + x]->SetFont(font);
@@ -46,6 +49,7 @@ cMain::~cMain()
 {
 	delete[] buttonArray;
 	delete[] bombArray;
+	delete[] countArray;
 }
 
 int cMain::CountNeighbors(int x, int y)
@@ -64,6 +68,30 @@ int cMain::CountNeighbors(int x, int y)
 		}
 	}
 	return mineCount;
+}
+
+void cMain::OpenEmptyTiles(int x, int y)
+{
+	if (countArray[y * GridWidth + x] == false)
+	{
+		int mineCount = CountNeighbors(x, y);
+		countArray[y * GridWidth + x] = true;
+		if (mineCount == 0)
+		{
+			for (int i = -1; i < 2; i++)
+			{
+				for (int j = -1; j < 2; j++)
+				{
+					if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
+					{
+						OpenEmptyTiles(x + i, y + j);
+					}
+				}
+			}
+			buttonArray[y * GridWidth + x]->Enable(false);
+			buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxGREEN);
+		}
+	}
 }
 
 void cMain::OnButtonClicked(wxCommandEvent& evt)
@@ -98,13 +126,13 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 	// Disable Button, preventing it being pressed again
 	buttonArray[y * GridWidth + x]->Enable(false);
 	buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxGREEN);
-	
+
 	// check if player hit a mine
-	if (bombArray[y*GridWidth + x] == -1)
+	if (bombArray[y * GridWidth + x] == -1)
 	{
 		// Set bomb color
 		buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxBLACK);
-		
+
 		// lose message
 		wxMessageBox("Game over, try again");
 
@@ -118,31 +146,22 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 				buttonArray[y * GridWidth + x]->SetLabel("");
 				buttonArray[y * GridWidth + x]->Enable(true);
 				buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxWHITE);
+				countArray[y * GridWidth + x] = false;
 			}
 		}
 	}
 	else
 	{
 		// Count neighboring mines
-		int mineCount = CountNeighbors(x,y);
-		
-		
+		int mineCount = CountNeighbors(x, y);
+
+
 		// empty tile opens all nearby empty tiles
 		if (mineCount == 0)
 		{
-			for (int i = -1; i < 2; i++)
-			{
-				for (int j = -1; j < 2; j++)
-				{
-					if (bombArray[(y + j) * GridWidth + (x + i)] == 0)
-					{
-						buttonArray[(y+j) * GridWidth + (x+i)]->Enable(false);
-						buttonArray[(y+j) * GridWidth + (x+i)]->SetBackgroundColour(*wxGREEN);
-					}
-				}
-			}
+			OpenEmptyTiles(x, y);
 		}
-		
+
 		// update button label to show min count if > 0
 		if (mineCount > 0)
 		{
