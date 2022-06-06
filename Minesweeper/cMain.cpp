@@ -82,7 +82,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 	if (firstClick)
 	{
-		int mines = 30;
+		int mines = 20;
 
 		while (mines)
 		{
