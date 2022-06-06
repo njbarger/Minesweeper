@@ -32,6 +32,9 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 
 			buttonArray[y * GridWidth + x]->SetFont(font);
 
+			// Sets all count values to false
+			countArray[y * GridWidth + x] = false;
+
 			// Adds to grid to fill in space?
 			grid->Add(buttonArray[y * GridWidth + x], 1, wxEXPAND | wxALL);
 
@@ -119,6 +122,7 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 				bombArray[y * GridWidth + x] = 0;
 				buttonArray[y * GridWidth + x]->SetLabel("");
 				buttonArray[y * GridWidth + x]->Enable(true);
+				countArray[y * GridWidth + x] = false;
 			}
 		}
 	}
@@ -162,7 +166,7 @@ void cMain::OpenEmptyTiles(int x, int y)
 				}
 			}
 			buttonArray[y * GridWidth + x]->Enable(false);
-			buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxGREEN);
+
 		}
 	}
 }

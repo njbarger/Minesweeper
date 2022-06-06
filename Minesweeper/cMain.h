@@ -3,9 +3,7 @@
 
 class cMain : public wxFrame
 {
-public:
-	cMain();
-	~cMain();
+private:
 
 	int GridWidth = 10;
 	int GridHeight = 10;
@@ -17,6 +15,11 @@ public:
 	int* bombArray = nullptr;
 	// populates mine field on first click
 	bool firstClick = true;
+
+public:
+
+	cMain();
+	~cMain();
 
 	void OnButtonClicked(wxCommandEvent& evt);
 	int CountNeighbors(int x, int y);
