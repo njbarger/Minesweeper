@@ -127,6 +127,11 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 		// Count neighboring mines
 		int mineCount = CountNeighbors(x, y);
 
+		if (mineCount == 0)
+		{
+			OpenEmptyTiles(x, y);
+		}
+
 		// update button label to show min count if > 0
 		if (mineCount > 0)
 		{
