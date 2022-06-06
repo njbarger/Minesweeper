@@ -8,8 +8,9 @@ private:
 	int GridWidth = 10;
 	int GridHeight = 10;
 	wxButton** buttonArray;
+	wxGridSizer* grid;
+	int* countArray;
 
-	
 	// locations of mines
 	int* bombArray = nullptr;
 
