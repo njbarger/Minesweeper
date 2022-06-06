@@ -11,6 +11,7 @@ public:
 	int GridHeight = 10;
 	wxButton** buttonArray;
 	wxGridSizer* grid;
+	bool* countArray;
 
 	// locations of mines
 	int* bombArray = nullptr;
@@ -19,6 +20,7 @@ public:
 
 	void OnButtonClicked(wxCommandEvent& evt);
 	int CountNeighbors(int x, int y);
+	void OpenEmptyTiles(int x, int y);
 
 	// Event handler
 	wxDECLARE_EVENT_TABLE();

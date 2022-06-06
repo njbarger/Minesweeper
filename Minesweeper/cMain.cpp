@@ -19,6 +19,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 	grid = new wxGridSizer(GridWidth, GridHeight, 0, 0);
 
 	bombArray = new int[GridWidth * GridHeight];
+	countArray = new bool[GridWidth * GridHeight];
 
 	wxFont font(24, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD, false);
 
@@ -135,4 +136,28 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 	}
 	evt.Skip();
+}
+
+void cMain::OpenEmptyTiles(int x, int y)
+{
+	if (countArray[y * GridWidth + x] == false)
+	{
+		int mineCount = CountNeighbors(x, y);
+		countArray[y * GridWidth + x] = true;
+		if (mineCount == 0)
+		{
+			for (int i = -1; i < 2; i++)
+			{
+				for (int j = -1; j < 2; j++)
+				{
+					if (x + 1 >= 0 && x + i < GridWidth && y + j >= 0 && y + j < GridHeight)
+					{
+						OpenEmptyTiles(x + i, y + j);
+					}
+				}
+			}
+			buttonArray[y * GridWidth + x]->Enable(false);
+			buttonArray[y * GridWidth + x]->SetBackgroundColour(*wxGREEN);
+		}
+	}
 }
