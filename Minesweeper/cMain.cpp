@@ -25,7 +25,7 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 		for (size_t y = 0; y < GridHeight; y++)
 		{
 			// Sets count bools all to false;
-			countArray[x, y] = false;
+			countArray[y*GridWidth + x] = false;
 			// Adds a button to each position
 			buttonArray[y * GridWidth + x] = new wxButton(this, 10000 + (y * GridWidth + x));
 			buttonArray[y * GridWidth + x]->SetFont(font);
