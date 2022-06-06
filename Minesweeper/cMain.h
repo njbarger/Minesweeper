@@ -3,9 +3,7 @@
 
 class cMain : public wxFrame
 {
-public:
-	cMain();
-	~cMain();
+private:
 				  
 	int GridWidth = 10;
 	int GridHeight = 10;
@@ -20,6 +18,11 @@ public:
 
 	// populates mine field on first click
 	bool firstClick = true;
+
+
+public:
+	cMain();
+	~cMain();
 
 	// Click Event
 	void OnButtonClicked(wxCommandEvent& evt);
