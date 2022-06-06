@@ -14,14 +14,9 @@ wxEND_EVENT_TABLE()
 // Main application window
 cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSize(600,600))
 {
-	_CrtDumpMemoryLeaks();
-	_CrtSetDbgFlag(_CRTDBG_ALLOC_MEM_DF | _CRTDBG_LEAK_CHECK_DF);
-	_CrtSetReportMode(_CRT_WARN, _CRTDBG_MODE_DEBUG);
-
-
 	// Grid of buttons
 	buttonArray = new wxButton * [GridWidth * GridHeight];
-	wxGridSizer* grid = new wxGridSizer(GridWidth, GridHeight, 0, 0);
+	grid = new wxGridSizer(GridWidth, GridHeight, 0, 0);
 
 	bombArray = new int[GridWidth * GridHeight];
 
@@ -53,7 +48,9 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 cMain::~cMain()
 {
 	delete[] buttonArray;
+	buttonArray = nullptr;
 	delete[] bombArray;
+	bombArray = nullptr;
 }
 
 
@@ -137,7 +134,5 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 
 	}
-
-
 	evt.Skip();
 }

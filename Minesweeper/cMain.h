@@ -10,7 +10,8 @@ public:
 	int GridWidth = 10;
 	int GridHeight = 10;
 	wxButton** buttonArray;
-	
+	wxGridSizer* grid;
+
 	// locations of mines
 	int* bombArray = nullptr;
 	// populates mine field on first click
