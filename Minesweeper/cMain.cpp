@@ -102,13 +102,13 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 
 	if (firstClick)
 	{
-		int mines = 30;
+		int mines = 20;
 
 		while (mines)
 		{
 			// generate random mine locations
-			int rx = rand() % GridWidth;
-			int ry = rand() % GridHeight;
+			int rx = rand() % (GridWidth);
+			int ry = rand() % (GridHeight);
 
 			// make sure its not first button clicked, and is not already a mine
 			if (bombArray[ry * GridWidth + rx] == 0 && rx != x && ry != y)
