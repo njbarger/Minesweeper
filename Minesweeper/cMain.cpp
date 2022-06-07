@@ -35,8 +35,9 @@ cMain::cMain() : wxFrame(nullptr, wxID_ANY, "Minesweeper", wxPoint(50, 30), wxSi
 			// Adds to grid to fill in space?
 			grid->Add(buttonArray[y * GridWidth + x], 1, wxEXPAND | wxALL);
 
-			// Binds an click event handler to each button
+			// Binds a click event handler to each button
 			buttonArray[y * GridWidth + x]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnButtonClicked, this);
+			buttonArray[y * GridWidth + x]->Bind(wxEVT_COMMAND_BUTTON_CLICKED, &cMain::OnRightClick, this);
 			bombArray[y * GridWidth + x] = 0;
 		}
 	}
@@ -178,6 +179,35 @@ void cMain::OnButtonClicked(wxCommandEvent& evt)
 		}
 
 
+	}
+
+
+	evt.Skip();
+}
+
+void cMain::OnRightClick(wxCommandEvent& evt)
+{
+	// Get coordinate of button in field array
+	int x = (evt.GetId() - 10000) % GridWidth;
+	int y = (evt.GetId() - 10000) / GridWidth;
+
+	if (buttonArray[y * GridWidth + x]->IsEnabled())
+	{
+		if (rightClickCheck == 0)
+		{
+			rightClickCheck = 1;
+			buttonArray[y * GridWidth + x]->SetLabel(L"X");
+		}
+		else if (rightClickCheck == 1)
+		{
+			rightClickCheck = 2;
+			buttonArray[y * GridWidth + x]->SetLabel(L"?");
+		}
+		else if (rightClickCheck == 2)
+		{
+			rightClickCheck = 0;
+			buttonArray[y * GridWidth + x]->DontShowLabel();
+		}
 	}
 
 

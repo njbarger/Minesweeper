@@ -19,6 +19,12 @@ private:
 	// populates mine field on first click
 	bool firstClick = true;
 
+	// Counter for right click options
+	// 0 = no image
+	// 1 = X for bomb flag
+	// 2 = ? for unsure flag
+	int rightClickCheck = 0;
+
 
 public:
 	cMain();
@@ -27,11 +33,14 @@ public:
 	// Click Event
 	void OnButtonClicked(wxCommandEvent& evt);
 
+	void OnRightClick(wxCommandEvent& evt);
+
 	// Neighboring Bomb Count
 	int CountNeighbors(int x, int y);
 	
 	// Open all empty tiles adjacent to each other
 	void OpenEmptyTiles(int x, int y);
+
 
 	// Event handler
 	wxDECLARE_EVENT_TABLE();
